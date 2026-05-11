@@ -9,7 +9,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ClipboardCheck, Truck, Gauge } from "lucide-react";
 
-const MOBILE_UNIT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663647456493/mEJBkFbB7UGeMtd3qBLotR/sprint-mobile-unit-MDq9JLzd2dXFt3W493hDtx.webp";
+const MOBILE_UNIT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663647456493/mEJBkFbB7UGeMtd3qBLotR/sprint-van-branded-SqixJxaMzMXZ9PMz6FPdxJ.webp";
 const TREADMILL_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663647456493/mEJBkFbB7UGeMtd3qBLotR/sprint-treadmill-H2wiuaJqaF8si7epUWWhCR.webp";
 
 const STEPS = [

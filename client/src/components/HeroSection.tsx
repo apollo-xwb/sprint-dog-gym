@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Zap, ChevronDown } from "lucide-react";
 
 const HERO_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663647456493/mEJBkFbB7UGeMtd3qBLotR/sprint-hero-bg-HrzFmpCfK7Po6vVGJfgQid.webp";
-const DOG_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663647456493/mEJBkFbB7UGeMtd3qBLotR/sprint-dog-athlete-HUHdKLM9k9D5N2TWEZo8Si.webp";
+const DOG_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663647456493/mEJBkFbB7UGeMtd3qBLotR/sprint-dog-transparent-ZZM9kEoYfbMRwzhRLzz3Hj.webp";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
