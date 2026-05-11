@@ -108,7 +108,7 @@ export default function HeroSection() {
               className="text-zinc-300 text-lg lg:text-xl font-light leading-relaxed max-w-md mb-10"
               style={{ fontFamily: "'Inter', sans-serif", fontWeight: 300 }}
             >
-              Your high-drive dog is an athlete locked in a quiet house.{" "}
+              Your high-drive dog is an athlete who drank pre-workout and is strapped to a chair in a locked room, punished if they disobey the order of sitting still.{" "}
               <span className="text-zinc-100 font-medium">
                 We fulfill their biological needs.
               </span>
