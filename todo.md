@@ -57,7 +57,7 @@
 - [x] Implement 5-Session package payment (R2500)
 - [x] Implement 10-Session package payment (R4800)
 - [x] Implement Monthly subscription payment (R1950/mo)
-- [ ] Add payment confirmation and receipt emails
+- [ ] Add payment confirmation and receipt emails (pending Stripe keys)
 
 ## Phase 9: Yearly Subscription Option (Completed)
 - [x] Add yearly subscription option for Monthly plan
@@ -65,11 +65,11 @@
 - [x] Implement yearly payment flow
 - [x] Add toggle/selector for monthly vs yearly billing
 
-## Phase 10: Internal Dashboard (Completed - Core)
+## Phase 10: Internal Dashboard (Completed - Enhanced)
 - [x] Create admin dashboard layout
 - [x] Add bookings management section
   - [x] View all bookings
-  - [ ] Filter by date, status, dog
+  - [x] Filter by date, status, dog
   - [ ] Edit booking details
   - [ ] Cancel bookings
 - [x] Add subscriptions management section
@@ -77,9 +77,9 @@
   - [x] Track subscription status
   - [ ] Handle subscription renewals
   - [x] Process cancellations
-- [ ] Add users/dogs management section
-  - [ ] View all registered dogs
-  - [ ] View dog profiles
+- [x] Add users/dogs management section
+  - [x] View all registered dogs
+  - [x] View dog profiles
   - [ ] Track dog history
 - [x] Add revenue/analytics dashboard
   - [x] Total revenue
@@ -91,16 +91,25 @@
   - [ ] Track session completion
   - [ ] Record session data (speed, duration, heart rate)
 
-## Phase 11: Testing & Refinement
-- [ ] Test booking flow end-to-end
-- [ ] Test payment processing
-- [ ] Test multi-dog scenarios
-- [ ] Test dashboard functionality
-- [ ] Mobile responsiveness testing
+## Phase 11: Testing & Refinement (Partial)
+- [x] Test booking flow end-to-end (manual)
+- [ ] Test payment processing (requires Stripe keys)
+- [x] Test multi-dog scenarios (manual)
+- [x] Test dashboard functionality (manual)
+- [x] Mobile responsiveness testing (manual)
 - [ ] Browser compatibility testing
 
-## Phase 12: Deployment & Launch
+## Phase 12: Deployment & Launch (Pending)
 - [ ] Final QA and bug fixes
 - [ ] Deploy to production
 - [ ] Set up monitoring and analytics
 - [ ] Create user documentation
+
+## Additional Features Implemented
+- [x] Enhanced Booking Modal with per-dog packages and Buddy System discount
+- [x] Monthly/yearly billing toggle for subscriptions
+- [x] Enhanced Chatbot with SPRINT FAQ/pricing knowledge
+- [x] Chat router for LLM integration
+- [x] Enhanced Admin Dashboard with 5 tabs and KPIs
+- [x] Booking filtering and subscription cancellation UI
+- [x] Real-time price calculation with discounts
