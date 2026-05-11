@@ -8,6 +8,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Zap } from "lucide-react";
+import AppSideMenu from "./AppSideMenu";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -102,6 +103,9 @@ export default function Navbar() {
                 <Zap size={14} strokeWidth={2.5} />
                 The Quiz
               </button>
+            </div>
+            <div className="border-t border-zinc-800 mt-6 pt-6">
+              <AppSideMenu />
             </div>
           </motion.div>
         )}

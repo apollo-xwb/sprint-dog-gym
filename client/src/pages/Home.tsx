@@ -14,10 +14,13 @@ import QuizSection from "@/components/QuizSection";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import KineticPulse from "@/components/KineticPulse";
+import FloatingNav from "@/components/FloatingNav";
+import WhatToBringSection from "@/components/WhatToBringSection";
+import CoolFactsSection from "@/components/CoolFactsSection";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-950 overflow-x-hidden">
+    <div className="min-h-screen bg-zinc-950 overflow-x-hidden pb-28">
       {/* Sticky Navigation */}
       <Navbar />
 
@@ -78,8 +81,23 @@ export default function Home() {
         <div className="h-16 bg-gradient-to-b from-gray-50 to-zinc-950" />
       </div>
 
+      {/* ── What to Bring (Free Value) ── Light section */}
+      <WhatToBringSection />
+
+      {/* ── Cool Facts (Science) ── Dark section */}
+      <CoolFactsSection />
+
+      {/* ── Transition: Dark → Light ── */}
+      <div className="relative bg-zinc-950" style={{ marginBottom: "-1px" }}>
+        <KineticPulse />
+        <div className="h-16 bg-gradient-to-b from-zinc-950 to-gray-50" />
+      </div>
+
       {/* ── Footer ── */}
       <Footer />
+
+      {/* ── Floating Bottom Nav ── */}
+      <FloatingNav />
     </div>
   );
 }
