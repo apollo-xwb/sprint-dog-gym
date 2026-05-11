@@ -1,37 +1,70 @@
 /* ============================================================
-   SPRINT — The Quiz Section
+   SPRINT — The Quiz Section (Enhanced)
    Design: Dark zinc-950, cyan neon accents
-   Content: Energy deficit calculator CTA with interactive feel
+   Content: Energy deficit calculator with all dog sizes
    ============================================================ */
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Zap, ArrowRight, Activity } from "lucide-react";
+import { Zap, ArrowRight, Activity, AlertCircle } from "lucide-react";
 
-const BREEDS = [
-  "Belgian Malinois",
-  "Border Collie",
-  "German Shepherd",
-  "Siberian Husky",
-  "Vizsla",
-  "Australian Shepherd",
-  "Jack Russell Terrier",
-  "Weimaraner",
-  "Other High-Drive Breed",
+const DOG_SIZES = {
+  small: {
+    label: "Small (Under 15kg)",
+    breeds: ["Chihuahua", "Pug", "Dachshund", "Shih Tzu", "Cavalier King Charles", "French Bulldog"],
+    baseEnergy: 60,
+  },
+  medium: {
+    label: "Medium (15-30kg)",
+    breeds: ["Beagle", "Cocker Spaniel", "Bulldog", "Poodle", "Schnauzer", "Corgi"],
+    baseEnergy: 90,
+  },
+  large: {
+    label: "Large (30-45kg)",
+    breeds: ["Labrador Retriever", "Golden Retriever", "German Shepherd", "Boxer", "Dalmatian", "Vizsla"],
+    baseEnergy: 120,
+  },
+  xlarge: {
+    label: "Extra Large (45kg+)",
+    breeds: ["Belgian Malinois", "Great Dane", "German Shepherd (Working)", "Husky", "Weimaraner", "Border Collie"],
+    baseEnergy: 150,
+  },
+};
+
+const BEHAVIORAL_ISSUES = [
+  { issue: "Destructive chewing", severity: "high" },
+  { issue: "Excessive barking", severity: "high" },
+  { issue: "Jumping on people", severity: "medium" },
+  { issue: "Pulling on leash", severity: "medium" },
+  { issue: "Aggression towards other dogs", severity: "high" },
+  { issue: "Separation anxiety", severity: "high" },
+  { issue: "Digging and excavation", severity: "medium" },
+  { issue: "Obsessive behaviors", severity: "high" },
+  { issue: "Inability to settle/relax", severity: "medium" },
+  { issue: "Escaping/running away", severity: "high" },
 ];
 
 export default function QuizSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [selectedSize, setSelectedSize] = useState<keyof typeof DOG_SIZES | null>(null);
   const [selectedBreed, setSelectedBreed] = useState<string | null>(null);
   const [walkMinutes, setWalkMinutes] = useState(30);
   const [showResult, setShowResult] = useState(false);
 
-  const deficit = Math.max(0, 120 - walkMinutes);
-  const deficitPercent = Math.round((deficit / 120) * 100);
+  const baseEnergy = selectedSize ? DOG_SIZES[selectedSize].baseEnergy : 120;
+  const deficit = Math.max(0, baseEnergy - walkMinutes);
+  const deficitPercent = Math.round((deficit / baseEnergy) * 100);
 
   const handleCalculate = () => {
     if (selectedBreed) setShowResult(true);
+  };
+
+  const getRecommendedBehaviors = () => {
+    const relevantBehaviors = BEHAVIORAL_ISSUES.filter(
+      (b) => deficitPercent > 40 || (deficitPercent > 20 && b.severity === "high")
+    );
+    return relevantBehaviors.slice(0, 3);
   };
 
   return (
@@ -82,8 +115,7 @@ export default function QuizSection() {
               style={{ fontFamily: "'Inter', sans-serif" }}
             >
               The Kinetik Deficit Score measures the gap between your dog's biological energy
-              requirement and their current daily output. Most high-drive dogs in Cape Town
-              operate at a 60–80% deficit.
+              requirement and their current daily output. <strong>Only 32% of dogs reach their required daily energy output.</strong> The rest operate at a 40–80% deficit, leading to behavioral issues.
             </motion.p>
 
             {/* Stats */}
@@ -94,8 +126,8 @@ export default function QuizSection() {
               className="flex gap-8"
             >
               {[
-                { value: "68%", label: "Avg. deficit in suburban dogs" },
-                { value: "3 days", label: "To see behavioural change" },
+                { value: "68%", label: "Dogs with unmet energy needs" },
+                { value: "3 days", label: "To see behavioral improvement" },
               ].map((stat) => (
                 <div key={stat.label}>
                   <div className="font-display text-3xl text-cyan-400">{stat.value}</div>
@@ -121,30 +153,60 @@ export default function QuizSection() {
 
             {!showResult ? (
               <>
-                {/* Breed Selection */}
+                {/* Size Selection */}
                 <div className="mb-6">
                   <label
                     className="sprint-label text-zinc-400 text-[10px] block mb-3"
                   >
-                    Dog's Breed
+                    Dog Size
                   </label>
                   <div className="grid grid-cols-2 gap-2">
-                    {BREEDS.slice(0, 6).map((breed) => (
+                    {Object.entries(DOG_SIZES).map(([key, value]) => (
                       <button
-                        key={breed}
-                        onClick={() => setSelectedBreed(breed)}
+                        key={key}
+                        onClick={() => {
+                          setSelectedSize(key as keyof typeof DOG_SIZES);
+                          setSelectedBreed(null);
+                        }}
                         className={`text-left px-3 py-2 text-xs border transition-all duration-150 ${
-                          selectedBreed === breed
+                          selectedSize === key
                             ? "border-cyan-400 bg-cyan-400/10 text-cyan-400"
                             : "border-zinc-700 text-zinc-400 hover:border-zinc-500"
                         }`}
                         style={{ fontFamily: "'Inter', sans-serif" }}
                       >
-                        {breed}
+                        {value.label}
                       </button>
                     ))}
                   </div>
                 </div>
+
+                {/* Breed Selection */}
+                {selectedSize && (
+                  <div className="mb-6">
+                    <label
+                      className="sprint-label text-zinc-400 text-[10px] block mb-3"
+                    >
+                      Dog's Breed
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {DOG_SIZES[selectedSize].breeds.map((breed) => (
+                        <button
+                          key={breed}
+                          onClick={() => setSelectedBreed(breed)}
+                          className={`text-left px-3 py-2 text-xs border transition-all duration-150 ${
+                            selectedBreed === breed
+                              ? "border-cyan-400 bg-cyan-400/10 text-cyan-400"
+                              : "border-zinc-700 text-zinc-400 hover:border-zinc-500"
+                          }`}
+                          style={{ fontFamily: "'Inter', sans-serif" }}
+                        >
+                          {breed}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Daily Walk Duration */}
                 <div className="mb-8">
@@ -159,7 +221,7 @@ export default function QuizSection() {
                   <input
                     type="range"
                     min={0}
-                    max={120}
+                    max={baseEnergy}
                     step={5}
                     value={walkMinutes}
                     onChange={(e) => setWalkMinutes(Number(e.target.value))}
@@ -170,7 +232,7 @@ export default function QuizSection() {
                   />
                   <div className="flex justify-between sprint-label text-zinc-600 text-[10px] mt-1">
                     <span>0 min</span>
-                    <span>120 min</span>
+                    <span>{baseEnergy} min</span>
                   </div>
                 </div>
 
@@ -232,15 +294,32 @@ export default function QuizSection() {
                 </div>
 
                 <p
-                  className="text-zinc-400 text-sm leading-relaxed mb-6"
+                  className="text-zinc-400 text-sm leading-relaxed mb-4"
                   style={{ fontFamily: "'Inter', sans-serif" }}
                 >
                   {deficitPercent > 60
-                    ? "Critical deficit. Your dog is operating at a significant energy debt. Behavioural issues are likely a direct symptom."
+                    ? "Critical deficit. Your dog is operating at a significant energy debt. Behavioral issues are likely a direct symptom."
                     : deficitPercent > 30
                     ? "Moderate deficit. Your dog needs more structured high-output exercise to close the gap."
                     : "Low deficit. Your dog is relatively well-exercised, but a SPRINT session can still optimize their performance."}
                 </p>
+
+                {/* Behavioral Issues Warning */}
+                {deficitPercent > 40 && (
+                  <div className="mb-6 p-4 border border-amber-500/30 bg-amber-500/5">
+                    <div className="flex items-start gap-2 mb-2">
+                      <AlertCircle size={14} className="text-amber-500 mt-0.5 flex-shrink-0" />
+                      <span className="sprint-label text-amber-500 text-[10px]">Common Behavioral Issues</span>
+                    </div>
+                    <ul className="space-y-1">
+                      {getRecommendedBehaviors().map((b) => (
+                        <li key={b.issue} className="text-zinc-400 text-xs" style={{ fontFamily: "'Inter', sans-serif" }}>
+                          • {b.issue}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 <button
                   onClick={() =>
@@ -261,6 +340,7 @@ export default function QuizSection() {
                   onClick={() => {
                     setShowResult(false);
                     setSelectedBreed(null);
+                    setSelectedSize(null);
                     setWalkMinutes(30);
                   }}
                   className="w-full mt-3 py-2 text-zinc-500 hover:text-zinc-300 text-xs transition-colors"
