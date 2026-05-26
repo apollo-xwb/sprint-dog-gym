@@ -14,6 +14,8 @@ export const paymentsRouter = router({
         amount: z.number(), // in ZAR
         dogId: z.number(),
         billingCycle: z.enum(["single", "monthly", "yearly"]).optional(),
+        location: z.string().optional(),
+        sessions: z.array(z.object({ date: z.string(), time: z.string() })).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {

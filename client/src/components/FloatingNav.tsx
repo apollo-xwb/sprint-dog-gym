@@ -6,26 +6,56 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Home, Zap, Calendar, MessageCircle, User } from "lucide-react";
-import { useLocation } from "wouter";
 
 type NavItem = {
   id: string;
   label: string;
   icon: React.ReactNode;
-  href: string;
+  action: () => void;
 };
 
-const NAV_ITEMS: NavItem[] = [
-  { id: "home", label: "Home", icon: <Home size={20} />, href: "/" },
-  { id: "quiz", label: "Quiz", icon: <Zap size={20} />, href: "/#quiz" },
-  { id: "bookings", label: "Book", icon: <Calendar size={20} />, href: "/#pricing" },
-  { id: "chat", label: "Chat", icon: <MessageCircle size={20} />, href: "#" },
-  { id: "profile", label: "Profile", icon: <User size={20} />, href: "#" },
-];
-
 export default function FloatingNav() {
-  const [location] = useLocation();
   const [activeTab, setActiveTab] = useState("home");
+
+  const handleScroll = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const NAV_ITEMS: NavItem[] = [
+    { 
+      id: "home", 
+      label: "Home", 
+      icon: <Home size={20} />, 
+      action: () => window.scrollTo({ top: 0, behavior: "smooth" })
+    },
+    { 
+      id: "quiz", 
+      label: "Quiz", 
+      icon: <Zap size={20} />, 
+      action: () => handleScroll("quiz")
+    },
+    { 
+      id: "bookings", 
+      label: "Book", 
+      icon: <Calendar size={20} />, 
+      action: () => handleScroll("pricing")
+    },
+    { 
+      id: "chat", 
+      label: "Chat", 
+      icon: <MessageCircle size={20} />, 
+      action: () => handleScroll("chatbot")
+    },
+    { 
+      id: "profile", 
+      label: "Profile", 
+      icon: <User size={20} />, 
+      action: () => window.location.href = "/profile"
+    },
+  ];
 
   return (
     <motion.div
@@ -41,11 +71,13 @@ export default function FloatingNav() {
       }}
     >
       <div className="flex items-center gap-2 px-2 py-3 rounded-full">
-        {NAV_ITEMS.map((item, idx) => (
-          <motion.a
+        {NAV_ITEMS.map((item) => (
+          <motion.button
             key={item.id}
-            href={item.href}
-            onClick={() => setActiveTab(item.id)}
+            onClick={() => {
+              setActiveTab(item.id);
+              item.action();
+            }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className={`flex flex-col items-center justify-center px-4 py-2 rounded-lg transition-all duration-300 ${
@@ -63,7 +95,7 @@ export default function FloatingNav() {
             <span className="text-xs font-display mt-1" style={{ fontFamily: "'Barlow', sans-serif" }}>
               {item.label}
             </span>
-          </motion.a>
+          </motion.button>
         ))}
       </div>
     </motion.div>

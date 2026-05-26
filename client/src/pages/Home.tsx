@@ -25,7 +25,9 @@ export default function Home() {
       <Navbar />
 
       {/* ── Hero ── Dark marble/matte background */}
-      <HeroSection />
+      <section id="hero">
+        <HeroSection />
+      </section>
 
       {/* ── Transition: Dark → Light ── */}
       <div className="relative bg-zinc-950" style={{ marginBottom: "-1px" }}>
@@ -34,7 +36,9 @@ export default function Home() {
       </div>
 
       {/* ── Why Sprint ── Light marble section */}
-      <WhySprint />
+      <section id="why-sprint">
+        <WhySprint />
+      </section>
 
       {/* ── Transition: Light → Dark ── */}
       <div className="relative bg-gray-50" style={{ marginBottom: "-1px" }}>
@@ -43,7 +47,9 @@ export default function Home() {
       </div>
 
       {/* ── The Riley Method ── Dark section */}
-      <ProcessSection />
+      <section id="process">
+        <ProcessSection />
+      </section>
 
       {/* ── Testimonials ── Dark section (continuous) */}
       <TestimonialsSection />
@@ -55,7 +61,9 @@ export default function Home() {
       </div>
 
       {/* ── Pricing Grid ── Light marble section */}
-      <PricingSection />
+      <section id="pricing">
+        <PricingSection />
+      </section>
 
       {/* ── Transition: Light → Dark ── */}
       <div className="relative bg-gray-50" style={{ marginBottom: "-1px" }}>
@@ -64,7 +72,9 @@ export default function Home() {
       </div>
 
       {/* ── The Quiz ── Dark section */}
-      <QuizSection />
+      <section id="quiz">
+        <QuizSection />
+      </section>
 
       {/* ── Transition: Dark → Light ── */}
       <div className="relative bg-zinc-950" style={{ marginBottom: "-1px" }}>
@@ -73,7 +83,9 @@ export default function Home() {
       </div>
 
       {/* ── FAQ & Behavioral Issues ── Light marble section */}
-      <FAQSection />
+      <section id="faq">
+        <FAQSection />
+      </section>
 
       {/* ── Transition: Light → Dark ── */}
       <div className="relative bg-gray-50" style={{ marginBottom: "-1px" }}>
@@ -82,10 +94,20 @@ export default function Home() {
       </div>
 
       {/* ── What to Bring (Free Value) ── Light section */}
-      <WhatToBringSection />
+      <section id="what-to-bring">
+        <WhatToBringSection />
+      </section>
+
+      {/* ── Transition: Light → Dark ── */}
+      <div className="relative bg-gray-50" style={{ marginBottom: "-1px" }}>
+        <KineticPulse />
+        <div className="h-16 bg-gradient-to-b from-gray-50 to-zinc-950" />
+      </div>
 
       {/* ── Cool Facts (Science) ── Dark section */}
-      <CoolFactsSection />
+      <section id="cool-facts">
+        <CoolFactsSection />
+      </section>
 
       {/* ── Transition: Dark → Light ── */}
       <div className="relative bg-zinc-950" style={{ marginBottom: "-1px" }}>
@@ -95,6 +117,9 @@ export default function Home() {
 
       {/* ── Footer ── */}
       <Footer />
+
+      {/* ── Chatbot ── */}
+      <section id="chatbot" className="hidden" />
 
       {/* ── Floating Bottom Nav ── */}
       <FloatingNav />
