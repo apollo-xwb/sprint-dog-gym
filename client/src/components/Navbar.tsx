@@ -100,7 +100,9 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="fixed top-16 left-0 right-0 z-40 bg-zinc-950/95 backdrop-blur-md border-b border-amber-500/10 md:hidden"
+            className="fixed top-16 left-0 right-0 z-40 bg-zinc-950/95 backdrop-blur-md border-b border-amber-500/10 md:hidden h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain"
+            onWheel={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
           >
             <div className="flex flex-col px-6 py-6 gap-5">
               <MobileNavLink onClick={() => scrollTo("why-sprint")}>Why Sprint</MobileNavLink>

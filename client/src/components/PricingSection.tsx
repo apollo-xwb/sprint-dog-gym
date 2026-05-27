@@ -7,8 +7,9 @@
    ============================================================ */
 
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Check, Zap, Star, Users } from "lucide-react";
+import BookingModalEnhanced from "@/components/BookingModalEnhanced";
 
 const PACKAGES = [
   {
@@ -91,6 +92,7 @@ export default function PricingSection() {
   const bannerRef = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const bannerInView = useInView(bannerRef, { once: true, margin: "-50px" });
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   return (
     <section id="packages" className="relative py-24 lg:py-32 marble-bg overflow-hidden">
@@ -260,6 +262,7 @@ export default function PricingSection() {
 
                 {/* CTA Button */}
                 <button
+                  onClick={() => setBookingOpen(true)}
                   className={`w-full py-3 font-condensed font-700 tracking-widest uppercase text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                     pkg.highlight
                       ? "bg-amber-500 text-zinc-950 hover:bg-amber-400 neon-glow-amber"
@@ -330,6 +333,7 @@ export default function PricingSection() {
             </div>
 
             <button
+              onClick={() => setBookingOpen(true)}
               className="flex-shrink-0 flex items-center gap-2 px-7 py-3.5 bg-zinc-950 text-amber-500 font-condensed font-700 tracking-widest uppercase text-sm hover:bg-zinc-800 transition-all duration-200 hover:scale-[1.02]"
               style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700 }}
             >
@@ -339,6 +343,8 @@ export default function PricingSection() {
           </div>
         </div>
       </motion.div>
+
+      <BookingModalEnhanced isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
     </section>
   );
 }

@@ -143,16 +143,7 @@
   - [ ] Touch-friendly spacing
 
 ## Phase 14: Bug Fixes & Polish Features
-- [x] Fix mobile side menu scroll (prevent body scroll when menu open)
+- [ ] Fix mobile side menu scroll (prevent body scroll when menu open)
 - [ ] Add behavioral issues videos (5-6 autoplaying, no controls)
-- [ ] Create SPRINT logo Easter egg (transforms to dog SVG on scroll)
-- [ ] Add footer dog treadmill hero (Belgian Malinois/Border Collie with dark fade overlay)
-
-## Phase 15: Critical Feature Additions (Completed)
-- [x] Add location picker to booking modal (GPS/address where mobile unit meets)
-- [x] Fix nav button navigation (floating nav + side menu buttons must work)
-- [x] Implement multi-session scheduling (pick dates/times for all sessions in package upfront)
-- [x] Fix section fade transitions (white-to-white for "What to Bring" → "Pricing")
-- [ ] Add behavioral issue videos (5-6 autoplaying, no controls)
 - [ ] Create SPRINT logo Easter egg (transforms to dog SVG on scroll)
 - [ ] Add footer dog treadmill hero (Belgian Malinois/Border Collie with dark fade overlay)

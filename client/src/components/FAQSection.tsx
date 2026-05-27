@@ -92,7 +92,7 @@ export default function FAQSection() {
   const [expandedBehavior, setExpandedBehavior] = useState<number | null>(null);
 
   return (
-    <section ref={ref} className="relative py-24 lg:py-32 bg-gray-50 overflow-hidden">
+    <section id="faq" ref={ref} className="relative py-24 lg:py-32 bg-gray-50 overflow-hidden">
       {/* Amber radial glow */}
       <div
         className="absolute top-0 left-0 w-[600px] h-[400px] opacity-5 pointer-events-none blur-3xl"

@@ -29,7 +29,7 @@ const MENU_ITEMS: MenuItem[] = [
     label: "Book Session",
     icon: <Calendar size={32} />,
     description: "Schedule a sprint",
-    href: "/#pricing",
+    href: "/#packages",
     color: "from-amber-500/20 to-amber-600/10",
   },
   {

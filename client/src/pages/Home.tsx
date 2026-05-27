@@ -25,9 +25,7 @@ export default function Home() {
       <Navbar />
 
       {/* ── Hero ── Dark marble/matte background */}
-      <section id="hero">
-        <HeroSection />
-      </section>
+      <HeroSection />
 
       {/* ── Transition: Dark → Light ── */}
       <div className="relative bg-zinc-950" style={{ marginBottom: "-1px" }}>
@@ -36,9 +34,7 @@ export default function Home() {
       </div>
 
       {/* ── Why Sprint ── Light marble section */}
-      <section id="why-sprint">
-        <WhySprint />
-      </section>
+      <WhySprint />
 
       {/* ── Transition: Light → Dark ── */}
       <div className="relative bg-gray-50" style={{ marginBottom: "-1px" }}>
@@ -47,9 +43,7 @@ export default function Home() {
       </div>
 
       {/* ── The Riley Method ── Dark section */}
-      <section id="process">
-        <ProcessSection />
-      </section>
+      <ProcessSection />
 
       {/* ── Testimonials ── Dark section (continuous) */}
       <TestimonialsSection />
@@ -61,9 +55,7 @@ export default function Home() {
       </div>
 
       {/* ── Pricing Grid ── Light marble section */}
-      <section id="pricing">
-        <PricingSection />
-      </section>
+      <PricingSection />
 
       {/* ── Transition: Light → Dark ── */}
       <div className="relative bg-gray-50" style={{ marginBottom: "-1px" }}>
@@ -72,9 +64,7 @@ export default function Home() {
       </div>
 
       {/* ── The Quiz ── Dark section */}
-      <section id="quiz">
-        <QuizSection />
-      </section>
+      <QuizSection />
 
       {/* ── Transition: Dark → Light ── */}
       <div className="relative bg-zinc-950" style={{ marginBottom: "-1px" }}>
@@ -83,14 +73,7 @@ export default function Home() {
       </div>
 
       {/* ── FAQ & Behavioral Issues ── Light marble section */}
-      <section id="faq">
-        <FAQSection />
-      </section>
-
-      {/* ── What to Bring (Free Value) ── Light section (no transition, continuous light) */}
-      <section id="what-to-bring">
-        <WhatToBringSection />
-      </section>
+      <FAQSection />
 
       {/* ── Transition: Light → Dark ── */}
       <div className="relative bg-gray-50" style={{ marginBottom: "-1px" }}>
@@ -98,10 +81,11 @@ export default function Home() {
         <div className="h-16 bg-gradient-to-b from-gray-50 to-zinc-950" />
       </div>
 
+      {/* ── What to Bring (Free Value) ── Light section */}
+      <WhatToBringSection />
+
       {/* ── Cool Facts (Science) ── Dark section */}
-      <section id="cool-facts">
-        <CoolFactsSection />
-      </section>
+      <CoolFactsSection />
 
       {/* ── Transition: Dark → Light ── */}
       <div className="relative bg-zinc-950" style={{ marginBottom: "-1px" }}>
@@ -111,9 +95,6 @@ export default function Home() {
 
       {/* ── Footer ── */}
       <Footer />
-
-      {/* ── Chatbot ── */}
-      <section id="chatbot" className="hidden" />
 
       {/* ── Floating Bottom Nav ── */}
       <FloatingNav />
