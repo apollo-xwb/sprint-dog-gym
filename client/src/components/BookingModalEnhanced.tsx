@@ -47,11 +47,16 @@ export default function BookingModalEnhanced({ isOpen, onClose, onSuccess }: Boo
   const { data: dogs = [], isLoading: dogsLoading } = trpc.bookings.getDogs.useQuery();
   const createCheckout = trpc.payments.createCheckoutSession.useMutation();
 
-  // Calculate total sessions for multi-session scheduling
+  // Calculate total sessions for multi-session scheduling (sum of all dogs' sessions)
   const totalSessions = useMemo(() => {
-    if (dogPackages.length === 0) return 0;
-    const pkg = PACKAGE_DETAILS[dogPackages[0]?.packageId.toString()];
-    return typeof pkg?.sessions === "number" ? pkg.sessions : 1;
+    let total = 0;
+    dogPackages.forEach((dp) => {
+      const pkg = PACKAGE_DETAILS[dp.packageId.toString()];
+      if (pkg && typeof pkg.sessions === "number") {
+        total += pkg.sessions;
+      }
+    });
+    return total;
   }, [dogPackages]);
 
   // Calculate total with Buddy System discount
@@ -140,21 +145,38 @@ export default function BookingModalEnhanced({ isOpen, onClose, onSuccess }: Boo
   const handleConfirmBooking = async () => {
     setIsLoading(true);
     try {
-      const firstSelection = dogPackages[0];
-      if (!firstSelection) return;
-
-      const pkg = PACKAGE_DETAILS[firstSelection.packageId.toString()];
-      let amount = pkg.price;
-      if (firstSelection.packageId === 4 && billingCycle === "yearly") {
-        amount = amount * 12;
+      if (dogPackages.length === 0) {
+        toast.error("No dogs selected");
+        return;
       }
 
+      // Process all dogs/packages, not just the first
+      const packageDetails = dogPackages.map((dp, index) => {
+        const pkg = PACKAGE_DETAILS[dp.packageId.toString()];
+        let price = pkg?.price || 0;
+        if (index > 0) {
+          price = Math.round(price * 0.85);
+        }
+        if (dp.packageId === 4 && billingCycle === "yearly") {
+          price = price * 12;
+        }
+        return {
+          dogId: dp.dogId,
+          packageId: dp.packageId,
+          packageName: pkg?.name || "Unknown",
+          price,
+        };
+      });
+
+      const totalAmount = packageDetails.reduce((sum, p) => sum + p.price, 0);
+      const packageNames = packageDetails.map((p) => p.packageName).join(", ");
+
       const result = await createCheckout.mutateAsync({
-        packageId: firstSelection.packageId,
-        packageName: pkg.name,
-        amount,
-        dogId: firstSelection.dogId,
-        billingCycle: firstSelection.packageId === 4 ? billingCycle : "single",
+        packageId: dogPackages[0].packageId,
+        packageName: packageNames,
+        amount: totalAmount,
+        dogId: dogPackages[0].dogId,
+        billingCycle: dogPackages[0].packageId === 4 ? billingCycle : "single",
         location: location?.address,
         sessions: sessionSchedules.length > 0 ? sessionSchedules : undefined,
       });

@@ -5,6 +5,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useLocation } from "wouter";
 import { Home, Zap, Calendar, MessageCircle, User } from "lucide-react";
 
 type NavItem = {
@@ -16,6 +17,7 @@ type NavItem = {
 
 export default function FloatingNav() {
   const [activeTab, setActiveTab] = useState("home");
+  const [, setLocation] = useLocation();
 
   const handleScroll = (id: string) => {
     const el = document.getElementById(id);
@@ -53,7 +55,7 @@ export default function FloatingNav() {
       id: "profile", 
       label: "Profile", 
       icon: <User size={20} />, 
-      action: () => window.location.href = "/profile"
+      action: () => setLocation("/profile")
     },
   ];
 
@@ -78,9 +80,10 @@ export default function FloatingNav() {
               setActiveTab(item.id);
               item.action();
             }}
+            type="button"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`flex flex-col items-center justify-center px-4 py-2 rounded-lg transition-all duration-300 ${
+            className={`flex flex-col items-center justify-center px-4 py-2 rounded-lg transition-all duration-300 cursor-pointer ${
               activeTab === item.id
                 ? "bg-cyan-400/20 text-cyan-400"
                 : "text-zinc-400 hover:text-cyan-300"

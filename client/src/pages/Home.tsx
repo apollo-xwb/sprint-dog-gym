@@ -87,13 +87,7 @@ export default function Home() {
         <FAQSection />
       </section>
 
-      {/* ── Transition: Light → Dark ── */}
-      <div className="relative bg-gray-50" style={{ marginBottom: "-1px" }}>
-        <KineticPulse />
-        <div className="h-16 bg-gradient-to-b from-gray-50 to-zinc-950" />
-      </div>
-
-      {/* ── What to Bring (Free Value) ── Light section */}
+      {/* ── What to Bring (Free Value) ── Light section (no transition, continuous light) */}
       <section id="what-to-bring">
         <WhatToBringSection />
       </section>
