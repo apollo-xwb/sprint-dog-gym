@@ -45,6 +45,8 @@ export const bookingsRouter = router({
         dogId: z.number(),
         packageId: z.number(),
         sessionDate: z.date(),
+        locationAddress: z.string().optional(),
+        locationNotes: z.string().optional(),
         notes: z.string().optional(),
       })
     )
@@ -64,6 +66,8 @@ export const bookingsRouter = router({
         packageId: input.packageId,
         sessionDate: input.sessionDate,
         notes: input.notes,
+        locationAddress: input.locationAddress,
+        locationNotes: input.locationNotes,
         status: "scheduled",
       });
     }),

@@ -11,6 +11,14 @@ import { useRef, useState } from "react";
 import { Check, Zap, Star, Users } from "lucide-react";
 import BookingModalEnhanced from "@/components/BookingModalEnhanced";
 
+/** Maps pricing card id → backend package id */
+const PACKAGE_ID_BY_CARD: Record<string, number> = {
+  single: 1,
+  five: 2,
+  ten: 3,
+  monthly: 4,
+};
+
 const PACKAGES = [
   {
     id: "single",
@@ -93,6 +101,12 @@ export default function PricingSection() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const bannerInView = useInView(bannerRef, { once: true, margin: "-50px" });
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingPackageId, setBookingPackageId] = useState<number | undefined>();
+
+  const openBooking = (cardId: string) => {
+    setBookingPackageId(PACKAGE_ID_BY_CARD[cardId]);
+    setBookingOpen(true);
+  };
 
   return (
     <section id="packages" className="relative py-24 lg:py-32 marble-bg overflow-hidden">
@@ -262,7 +276,7 @@ export default function PricingSection() {
 
                 {/* CTA Button */}
                 <button
-                  onClick={() => setBookingOpen(true)}
+                  onClick={() => openBooking(pkg.id)}
                   className={`w-full py-3 font-condensed font-700 tracking-widest uppercase text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
                     pkg.highlight
                       ? "bg-amber-500 text-zinc-950 hover:bg-amber-400 neon-glow-amber"
@@ -333,7 +347,7 @@ export default function PricingSection() {
             </div>
 
             <button
-              onClick={() => setBookingOpen(true)}
+              onClick={() => openBooking("ten")}
               className="flex-shrink-0 flex items-center gap-2 px-7 py-3.5 bg-zinc-950 text-amber-500 font-condensed font-700 tracking-widest uppercase text-sm hover:bg-zinc-800 transition-all duration-200 hover:scale-[1.02]"
               style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700 }}
             >
@@ -344,7 +358,14 @@ export default function PricingSection() {
         </div>
       </motion.div>
 
-      <BookingModalEnhanced isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
+      <BookingModalEnhanced
+        isOpen={bookingOpen}
+        initialPackageId={bookingPackageId}
+        onClose={() => {
+          setBookingOpen(false);
+          setBookingPackageId(undefined);
+        }}
+      />
     </section>
   );
 }

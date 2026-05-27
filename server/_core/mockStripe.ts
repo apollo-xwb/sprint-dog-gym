@@ -74,7 +74,7 @@ export const mockStripe = {
         
         const session: MockCheckoutSession = {
           id: generateId('cs'),
-          url: `${params.success_url}?session_id=${generateId('session')}`,
+          url: "",
           client_reference_id: params.client_reference_id || '',
           customer_email: params.customer_email || '',
           amount_total: totalAmount,
@@ -85,6 +85,10 @@ export const mockStripe = {
         };
 
         sessions.set(session.id, session);
+        // Ensure URL contains the session.id so confirmPayment can retrieve it.
+        session.url = params.success_url.includes("{CHECKOUT_SESSION_ID}")
+          ? params.success_url.replace("{CHECKOUT_SESSION_ID}", session.id)
+          : `${params.success_url}?session_id=${encodeURIComponent(session.id)}`;
         return session;
       },
 

@@ -143,7 +143,7 @@
   - [ ] Touch-friendly spacing
 
 ## Phase 14: Bug Fixes & Polish Features
-- [ ] Fix mobile side menu scroll (prevent body scroll when menu open)
+- [x] Fix mobile side menu scroll (prevent body scroll when menu open)
 - [ ] Add behavioral issues videos (5-6 autoplaying, no controls)
 - [ ] Create SPRINT logo Easter egg (transforms to dog SVG on scroll)
 - [ ] Add footer dog treadmill hero (Belgian Malinois/Border Collie with dark fade overlay)

@@ -1,34 +1,39 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import type { TrpcContext } from "../_core/context";
 
-// Define mocks BEFORE importing the module
-const mockCreatePayment = vi.fn();
-const mockCreateSubscription = vi.fn();
-const mockGetUserPayments = vi.fn();
-const mockGetActiveSubscriptions = vi.fn();
+const dbMocks = vi.hoisted(() => ({
+  mockCreatePayment: vi.fn(),
+  mockCreateSubscription: vi.fn(),
+  mockGetUserPayments: vi.fn(),
+  mockGetActiveSubscriptions: vi.fn(),
+  mockCreateBooking: vi.fn(),
+}));
 
 vi.mock("../db", () => ({
-  createPayment: mockCreatePayment,
-  createSubscription: mockCreateSubscription,
-  getUserPayments: mockGetUserPayments,
-  getActiveSubscriptions: mockGetActiveSubscriptions,
+  createPayment: dbMocks.mockCreatePayment,
+  createSubscription: dbMocks.mockCreateSubscription,
+  getUserPayments: dbMocks.mockGetUserPayments,
+  getActiveSubscriptions: dbMocks.mockGetActiveSubscriptions,
+  createBooking: dbMocks.mockCreateBooking,
 }));
 
 // Mock mockStripe BEFORE importing the router
-const mockCheckoutSessionsCreate = vi.fn();
-const mockCheckoutSessionsRetrieve = vi.fn();
-const mockSubscriptionsCancel = vi.fn();
+const stripeMocks = vi.hoisted(() => ({
+  mockCheckoutSessionsCreate: vi.fn(),
+  mockCheckoutSessionsRetrieve: vi.fn(),
+  mockSubscriptionsCancel: vi.fn(),
+}));
 
 vi.mock("../_core/mockStripe", () => ({
   mockStripe: {
     checkout: {
       sessions: {
-        create: mockCheckoutSessionsCreate,
-        retrieve: mockCheckoutSessionsRetrieve,
+        create: stripeMocks.mockCheckoutSessionsCreate,
+        retrieve: stripeMocks.mockCheckoutSessionsRetrieve,
       },
     },
     subscriptions: {
-      cancel: mockSubscriptionsCancel,
+      cancel: stripeMocks.mockSubscriptionsCancel,
     },
   },
 }));
@@ -63,7 +68,7 @@ describe("paymentsRouter", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mockCheckoutSessionsCreate.mockResolvedValue({
+    stripeMocks.mockCheckoutSessionsCreate.mockResolvedValue({
       id: "cs_test_123",
       url: "https://checkout.example.com/session",
       client_reference_id: "1",
@@ -71,19 +76,20 @@ describe("paymentsRouter", () => {
       amount_total: 55000,
       currency: "ZAR",
       status: "open",
-      metadata: { user_id: "1", dog_id: "1", package_id: "1" },
+      metadata: { user_id: "1", dog_id: "1", package_id: "1", billing_cycle: "single" },
       created: Math.floor(Date.now() / 1000),
     });
 
-    mockCheckoutSessionsRetrieve.mockResolvedValue({
+    stripeMocks.mockCheckoutSessionsRetrieve.mockResolvedValue({
       id: "cs_test_123",
       url: "https://checkout.example.com/session",
       status: "complete",
       amount_total: 55000,
       currency: "ZAR",
+      metadata: { user_id: "1", dog_id: "1", package_id: "1", billing_cycle: "single" },
     });
 
-    mockCreatePayment.mockResolvedValue({
+    dbMocks.mockCreatePayment.mockResolvedValue({
       id: 1,
       userId: 1,
       amount: "550",
@@ -96,7 +102,7 @@ describe("paymentsRouter", () => {
       updatedAt: new Date(),
     });
 
-    mockCreateSubscription.mockResolvedValue({
+    dbMocks.mockCreateSubscription.mockResolvedValue({
       id: 1,
       userId: 1,
       dogId: 1,
@@ -114,7 +120,7 @@ describe("paymentsRouter", () => {
       updatedAt: new Date(),
     });
 
-    mockGetUserPayments.mockResolvedValue([
+    dbMocks.mockGetUserPayments.mockResolvedValue([
       {
         id: 1,
         userId: 1,
@@ -127,7 +133,7 @@ describe("paymentsRouter", () => {
       },
     ]);
 
-    mockGetActiveSubscriptions.mockResolvedValue([
+    dbMocks.mockGetActiveSubscriptions.mockResolvedValue([
       {
         id: 1,
         userId: 1,
@@ -145,7 +151,7 @@ describe("paymentsRouter", () => {
       },
     ]);
 
-    mockSubscriptionsCancel.mockResolvedValue({
+    stripeMocks.mockSubscriptionsCancel.mockResolvedValue({
       id: "sub_test_123",
       status: "canceled",
     });

@@ -7,6 +7,8 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import AdminDashboardEnhanced from "./pages/AdminDashboardEnhanced";
 import ChatBotEnhanced from "./components/ChatBotEnhanced";
+import BookingSuccess from "./pages/BookingSuccess";
+import BookingCancelled from "./pages/BookingCancelled";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -14,6 +16,8 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/admin"} component={AdminDashboardEnhanced} />
+      <Route path={"/booking-success"} component={BookingSuccess} />
+      <Route path={"/booking-cancelled"} component={BookingCancelled} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

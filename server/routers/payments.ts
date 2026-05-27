@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../_core/trpc";
-import { createPayment, createSubscription, getUserPayments, getActiveSubscriptions } from "../db";
+import { createPayment, createSubscription, getUserPayments, getActiveSubscriptions, createBooking } from "../db";
 import { mockStripe } from "../_core/mockStripe";
 import { TRPCError } from "@trpc/server";
 
@@ -14,6 +14,12 @@ export const paymentsRouter = router({
         amount: z.number(), // in ZAR
         dogId: z.number(),
         billingCycle: z.enum(["single", "monthly", "yearly"]).optional(),
+        sessionDateTimeIso: z.string().optional(),
+        sessionDateTimeIsosJson: z.string().optional(),
+        locationAddress: z.string().optional(),
+        locationNotes: z.string().optional(),
+        subscriptionStartIso: z.string().optional(),
+        subscriptionRenewalIso: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -43,6 +49,12 @@ export const paymentsRouter = router({
           dog_id: input.dogId.toString(),
           package_id: input.packageId.toString(),
           billing_cycle: input.billingCycle || "single",
+          session_date_time_iso: input.sessionDateTimeIso || "",
+          session_date_time_isos_json: input.sessionDateTimeIsosJson || "",
+          location_address: input.locationAddress || "",
+          location_notes: input.locationNotes || "",
+          subscription_start_iso: input.subscriptionStartIso || "",
+          subscription_renewal_iso: input.subscriptionRenewalIso || "",
         },
         allow_promotion_codes: true,
       });
@@ -58,9 +70,6 @@ export const paymentsRouter = router({
     .input(
       z.object({
         sessionId: z.string(),
-        packageId: z.number(),
-        dogId: z.number(),
-        billingCycle: z.enum(["single", "monthly", "yearly"]).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -80,6 +89,14 @@ export const paymentsRouter = router({
         });
       }
 
+      const dogId = Number(session.metadata?.dog_id);
+      const packageId = Number(session.metadata?.package_id);
+      const billingCycle = (session.metadata?.billing_cycle as "single" | "monthly" | "yearly" | undefined) || "single";
+      const sessionDateTimeIso = session.metadata?.session_date_time_iso || "";
+      const sessionDateTimeIsosJson = session.metadata?.session_date_time_isos_json || "";
+      const locationAddress = session.metadata?.location_address || "";
+      const locationNotes = session.metadata?.location_notes || "";
+
       // Create payment record
       const payment = await createPayment({
         userId: ctx.user.id,
@@ -88,31 +105,31 @@ export const paymentsRouter = router({
         paymentMethod: "card",
         status: "completed",
         stripePaymentIntentId: session.id,
-        notes: `Payment for ${input.billingCycle || "single"} package`,
+        notes: `Payment for ${billingCycle} package`,
       });
 
       // If subscription, create subscription record
-      if (input.billingCycle && input.billingCycle !== "single") {
+      if (billingCycle !== "single") {
         const startDate = new Date();
         let endDate = new Date();
 
-        if (input.billingCycle === "monthly") {
+        if (billingCycle === "monthly") {
           endDate.setMonth(endDate.getMonth() + 1);
-        } else if (input.billingCycle === "yearly") {
+        } else if (billingCycle === "yearly") {
           endDate.setFullYear(endDate.getFullYear() + 1);
         }
 
         const subscription = await createSubscription({
           userId: ctx.user.id,
-          dogId: input.dogId,
-          packageId: input.packageId,
+          dogId,
+          packageId,
           stripeSubscriptionId: session.id,
           status: "active",
-          billingCycle: input.billingCycle as "monthly" | "yearly",
+          billingCycle: billingCycle as "monthly" | "yearly",
           startDate,
           endDate,
           sessionsUsed: 0,
-          sessionsRemaining: input.billingCycle === "monthly" ? 4 : 48, // Mock: 4 per month, 48 per year
+          sessionsRemaining: billingCycle === "monthly" ? 4 : 48, // Mock: 4 per month, 48 per year
           nextBillingDate: endDate,
           autoRenew: true,
         });
@@ -123,6 +140,34 @@ export const paymentsRouter = router({
           subscriptionId: subscription.id,
           paymentId: payment.id,
         };
+      }
+
+      const sessionIsos: string[] = (() => {
+        if (sessionDateTimeIsosJson) {
+          try {
+            const parsed = JSON.parse(sessionDateTimeIsosJson);
+            if (Array.isArray(parsed)) return parsed.filter((v) => typeof v === "string");
+          } catch {
+            // ignore
+          }
+        }
+        return sessionDateTimeIso ? [sessionDateTimeIso] : [];
+      })();
+
+      // If session dates were provided, create booking record(s).
+      for (const iso of sessionIsos) {
+        const sessionDate = new Date(iso);
+        if (Number.isNaN(sessionDate.getTime())) continue;
+        await createBooking({
+          userId: ctx.user.id,
+          dogId,
+          packageId,
+          sessionDate,
+          status: "scheduled",
+          locationAddress: locationAddress || undefined,
+          locationNotes: locationNotes || undefined,
+          notes: undefined,
+        });
       }
 
       return {

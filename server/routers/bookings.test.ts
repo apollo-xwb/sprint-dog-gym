@@ -1,19 +1,20 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import type { TrpcContext } from "../_core/context";
 
-// Define mocks BEFORE importing the module
-const mockGetUserDogs = vi.fn();
-const mockCreateDog = vi.fn();
-const mockCreateBooking = vi.fn();
-const mockCreatePayment = vi.fn();
-const mockGetAllPackages = vi.fn();
+const dbMocks = vi.hoisted(() => ({
+  mockGetUserDogs: vi.fn(),
+  mockCreateDog: vi.fn(),
+  mockCreateBooking: vi.fn(),
+  mockCreatePayment: vi.fn(),
+  mockGetAllPackages: vi.fn(),
+}));
 
 vi.mock("../db", () => ({
-  getAllPackages: mockGetAllPackages,
-  getUserDogs: mockGetUserDogs,
-  createDog: mockCreateDog,
-  createBooking: mockCreateBooking,
-  createPayment: mockCreatePayment,
+  getAllPackages: dbMocks.mockGetAllPackages,
+  getUserDogs: dbMocks.mockGetUserDogs,
+  createDog: dbMocks.mockCreateDog,
+  createBooking: dbMocks.mockCreateBooking,
+  createPayment: dbMocks.mockCreatePayment,
 }));
 
 // Import AFTER mocking
@@ -46,19 +47,19 @@ describe("bookingsRouter", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mockGetAllPackages.mockResolvedValue([
+    dbMocks.mockGetAllPackages.mockResolvedValue([
       { id: 1, name: "Single Session", type: "single", price: "550", sessions: 1, validDays: null, description: "Perfect for trying SPRINT" },
       { id: 2, name: "5-Session Bundle", type: "five_session", price: "2500", sessions: 5, validDays: 30, description: "Weekly sessions for a month" },
       { id: 3, name: "10-Session Bundle", type: "ten_session", price: "4800", sessions: 10, validDays: 60, description: "Bi-weekly sessions for 5 months" },
       { id: 4, name: "Monthly Unlimited", type: "monthly", price: "1950", sessions: null, validDays: 30, description: "All sessions for one month" },
     ]);
 
-    mockGetUserDogs.mockResolvedValue([
+    dbMocks.mockGetUserDogs.mockResolvedValue([
       { id: 1, userId: 1, name: "Max", breed: "Belgian Malinois", size: "large", age: 3, weight: 35, energyLevel: "very_high", behavioralIssues: null, notes: null, createdAt: new Date(), updatedAt: new Date() },
       { id: 2, userId: 1, name: "Luna", breed: "German Shepherd", size: "large", age: 2, weight: 32, energyLevel: "high", behavioralIssues: null, notes: null, createdAt: new Date(), updatedAt: new Date() },
     ]);
 
-    mockCreateDog.mockResolvedValue({
+    dbMocks.mockCreateDog.mockResolvedValue({
       id: 3,
       userId: 1,
       name: "Rocky",
@@ -73,20 +74,22 @@ describe("bookingsRouter", () => {
       updatedAt: new Date(),
     });
 
-    mockCreateBooking.mockResolvedValue({
+    dbMocks.mockCreateBooking.mockResolvedValue({
       id: 1,
       userId: 1,
       dogId: 1,
       packageId: 1,
       sessionDate: new Date(),
       status: "scheduled",
+      locationAddress: null,
+      locationNotes: null,
       notes: null,
       sessionMetrics: null,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
 
-    mockCreatePayment.mockResolvedValue({
+    dbMocks.mockCreatePayment.mockResolvedValue({
       id: 1,
       userId: 1,
       bookingId: 1,

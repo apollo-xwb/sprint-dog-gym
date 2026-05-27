@@ -72,6 +72,8 @@ export const bookings = mysqlTable("bookings", {
   dogId: int("dogId").notNull(),
   packageId: int("packageId").notNull(),
   sessionDate: timestamp("sessionDate").notNull(),
+  locationAddress: text("locationAddress"),
+  locationNotes: text("locationNotes"),
   status: mysqlEnum("status", ["scheduled", "completed", "cancelled", "no_show"]).default("scheduled").notNull(),
   notes: text("notes"),
   sessionMetrics: text("sessionMetrics"),
